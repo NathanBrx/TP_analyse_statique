@@ -27,13 +27,12 @@ public final class JdtParser {
     private JdtParser() {
     }
 
-    public static List<ParsedFile> parse(ProjectSources sources,
-            List<String> classpath) {
+    public static List<ParsedFile> parse(ProjectSources sources, List<String> classpath) {
         ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
 
-        // Niveau de langage du code analysé : Java 17.
+        // Niveau de langage du code analysé : Java 21.
         Map<String, String> options = JavaCore.getOptions();
-        JavaCore.setComplianceOptions(JavaCore.VERSION_17, options);
+        JavaCore.setComplianceOptions(JavaCore.VERSION_21, options);
         parser.setCompilerOptions(options);
 
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
