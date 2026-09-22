@@ -1,0 +1,3 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Partie A}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}A1}{1}{subsection.1.1}%

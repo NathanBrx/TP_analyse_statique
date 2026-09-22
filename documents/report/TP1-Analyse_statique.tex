@@ -1,0 +1,38 @@
+\documentclass{Templates/customArticle}
+
+\usepackage{float}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\LARGE\textbf{TP1 - HAI913I\\Evolution et restructuration des logiciels}\par}
+    \vspace{1cm}
+    {\LARGE\textbf{Analyse statique}\par}
+    \vspace{1cm}
+    {\Large\textbf{Nathan Boureux}\par}
+    \vfill
+    {\large{Master 2 Informatique, parcours Génie Logiciel}\par}
+    \vspace{0.5cm}
+    \includegraphics[width=0.2\textwidth]{assets/UM.png}
+    \includegraphics[width=0.2\textwidth]{assets/fds.png}
+\end{titlepage}
+
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+\pagenumbering{arabic}
+
+\section{Partie A}
+
+\subsection{A1}
+
+Dans JDT, l'infrastructure visite les enfants d'un nœud si et seulement si la méthode visit a renvoyé true.
+
+Renvoyer false élague le sous-arbre : cela signifie que le visiteur ne descendra pas dans les enfants de ce nœud.
+
+Cependant, même si tu renvoies false, la méthode endVisit sera tout de même appelée pour ce nœud.
+
+C'est exactement ce mécanisme qui permet, par exemple, d'ignorer volontairement le corps d'une classe anonyme lors du parcours.  
+
+\end{document}
