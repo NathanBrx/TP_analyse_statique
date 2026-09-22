@@ -3,7 +3,9 @@ package hai913i.tp1;
 import java.nio.file.Path;
 import java.util.List;
 
-import hai913i.tp1.parse.*;
+import hai913i.tp1.parse.JdtParser;
+import hai913i.tp1.parse.ProjectSources;
+import hai913i.tp1.visitor.*;
 import org.eclipse.jdt.core.compiler.IProblem;
 
 import hai913i.tp1.parse.JdtParser.ParsedFile;
@@ -44,6 +46,12 @@ public final class Main {
         System.out.println("Erreurs de compilation : " + errors);
 
         PrintTreeVisitor printer = new PrintTreeVisitor();
+        for (ParsedFile file : files) {
+            System.out.println("\n--- Arbre AST pour : " + file.path().getFileName() + " ---");
+            file.unit().accept(printer);
+        }
+
+        StructureVisitor structureVisitor = new StructureVisitor();
         for (ParsedFile file : files) {
             System.out.println("\n--- Arbre AST pour : " + file.path().getFileName() + " ---");
             file.unit().accept(printer);
