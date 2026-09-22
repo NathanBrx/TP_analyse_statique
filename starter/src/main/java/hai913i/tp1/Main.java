@@ -3,21 +3,11 @@ package hai913i.tp1;
 import java.nio.file.Path;
 import java.util.List;
 
+import hai913i.tp1.parse.*;
 import org.eclipse.jdt.core.compiler.IProblem;
 
-import hai913i.tp1.parse.JdtParser;
 import hai913i.tp1.parse.JdtParser.ParsedFile;
-import hai913i.tp1.parse.ProjectSources;
 
-/**
- * Point d'entrée en ligne de commande de l'analyseur (version de départ).
- *
- * Le squelette ne vérifie que l'environnement (point de contrôle A0) : il analyse le projet et affiche
- * le nombre d'unités de compilation et d'erreurs. Tout le reste est à concevoir : extraction de la
- * structure, appels, métriques, graphe d'appel, options comme le seuil X.
- *
- * Usage : java -jar target/hai913i-tp1-analyzer.jar DOSSIER_DU_PROJET
- */
 public final class Main {
 
     private Main() {
@@ -53,8 +43,10 @@ public final class Main {
         System.out.println("Unites de compilation  : " + files.size());
         System.out.println("Erreurs de compilation : " + errors);
 
-        // À FAIRE (A1 et suite) : parcourir les AST avec vos visiteurs, construire votre modèle de faits,
-        // puis calculer les métriques et le graphe d'appel. Gardez cette classe courte : elle lit les
-        // arguments et délègue.
+        PrintTreeVisitor printer = new PrintTreeVisitor();
+        for (ParsedFile file : files) {
+            System.out.println("\n--- Arbre AST pour : " + file.path().getFileName() + " ---");
+            file.unit().accept(printer);
+        }
     }
 }
