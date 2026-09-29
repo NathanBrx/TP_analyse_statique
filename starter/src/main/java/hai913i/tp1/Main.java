@@ -16,12 +16,18 @@ public final class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length < 1) {
-            System.err.println("Usage : java -jar target/hai913i-tp1-analyzer.jar DOSSIER_DU_PROJET");
+        if (args.length < 2) {
+            System.err.println("Usage : java -jar target/hai913i-tp1-analyzer.jar <DOSSIER_DU_PROJET> <ACTION>");
+            System.err.println("Actions disponibles :");
+            System.err.println("  tree      : Arbre AST (Étape A1)");
+            System.err.println("  structure : Structure (Étape A2)");
             System.exit(2);
         }
+
         Path project = Path.of(args[0]);
+        String action = args[1].toLowerCase();
         ProjectSources sources;
+
         try {
             sources = ProjectSources.of(project);
         } catch (IllegalArgumentException e) {
@@ -44,17 +50,46 @@ public final class Main {
         System.out.println("Racine des sources     : " + sources.sourceRoot());
         System.out.println("Unites de compilation  : " + files.size());
         System.out.println("Erreurs de compilation : " + errors);
+        switch (action) {
+            case "tree":
+                executerTreeVisitor(files);
+                break;
 
+            case "structure":
+                executerStructureVisitor(files);
+                break;
+
+            default:
+                System.err.println("Action non reconnue : '" + action + "'. Utilisez tree, structure, ou calls.");
+                System.exit(2);
+        }
+    }
+
+    private static void executerTreeVisitor(List<ParsedFile> files) {
         PrintTreeVisitor printer = new PrintTreeVisitor();
         for (ParsedFile file : files) {
             System.out.println("\n--- Arbre AST pour : " + file.path().getFileName() + " ---");
             file.unit().accept(printer);
         }
+    }
 
+    private static void executerStructureVisitor(List<ParsedFile> files) {
         StructureVisitor structureVisitor = new StructureVisitor();
         for (ParsedFile file : files) {
-            System.out.println("\n--- Arbre AST pour : " + file.path().getFileName() + " ---");
-            file.unit().accept(printer);
+            file.unit().accept(structureVisitor);
         }
+
+        int nbTotalClasses = structureVisitor.getNbClasses() + structureVisitor.getNbEnums() + structureVisitor.getNbInterfaces();
+        System.out.println("\n--- BILAN DE STRUCTURE ---");
+        System.out.println(nbTotalClasses + " classes : " +
+                structureVisitor.getNbClasses() + " classes, " +
+                structureVisitor.getNbInterfaces() + " interfaces et " +
+                structureVisitor.getNbEnums() + " énumérations");
+
+        System.out.println(structureVisitor.getNbMethodes() + " méthodes, dont " +
+                structureVisitor.getNbConstructors() + " constructeurs");
+
+        System.out.println(structureVisitor.getNbAttributes() + " attributs");
     }
+
 }
