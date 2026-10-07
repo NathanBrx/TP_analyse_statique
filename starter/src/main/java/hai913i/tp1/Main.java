@@ -106,7 +106,8 @@ public final class Main {
         int nonResolus = 0;
 
         for (ParsedFile file : files) {
-            CallVisitor callVisitor = new CallVisitor(file.unit());
+            String nomFichier = file.path().getFileName().toString();
+            CallVisitor callVisitor = new CallVisitor(file.unit(), nomFichier);
             file.unit().accept(callVisitor);
 
             totalAppels += callVisitor.getNbTotalAppels();

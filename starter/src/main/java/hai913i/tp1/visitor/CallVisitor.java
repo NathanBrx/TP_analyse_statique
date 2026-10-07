@@ -19,17 +19,6 @@ public class CallVisitor extends ASTVisitor {
         this.fileName = filename;
     }
 
-    @Override
-    public boolean visit(MethodDeclaration node) {
-        IMethodBinding binding = node.resolveBinding();
-        if (binding != null) {
-            currentCaller = binding.getDeclaringClass().getName() + "#" + binding.getName();
-        } else {
-            currentCaller = node.getName().getIdentifier();
-        }
-        return true;
-    }
-
     private void analyserAppel(Expression receveurExpr, IMethodBinding methodBinding, int startPosition, String nomAppel) {
         int ligne = unit.getLineNumber(startPosition);
 
@@ -70,6 +59,16 @@ public class CallVisitor extends ASTVisitor {
         System.out.println("[" + fileName + " | Ligne " + ligne + "] " + currentCaller + " ---> appelle ---> " + cibleQualifiee +
                 "\n    (Receveur : " + typeReceveur + " | Nature : " + (isInterne ? "Interne" : "Externe") + ")\n");
     }
+
+    @Override
+    public boolean visit(MethodDeclaration node) {
+        IMethodBinding binding = node.resolveBinding();
+        if (binding != null) {
+            currentCaller = binding.getDeclaringClass().getName() + "#" + binding.getName();
+        } else {
+            currentCaller = node.getName().getIdentifier();
+        }
+        return true;
     }
 
     @Override
