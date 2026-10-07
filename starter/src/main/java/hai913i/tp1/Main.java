@@ -3,6 +3,7 @@ package hai913i.tp1;
 import java.nio.file.Path;
 import java.util.List;
 
+import hai913i.tp1.metrics.MetricsService;
 import hai913i.tp1.model.*;
 import hai913i.tp1.parse.JdtParser;
 import hai913i.tp1.parse.ProjectSources;
@@ -70,6 +71,22 @@ public final class Main {
             CallVisitor callVisitor = new CallVisitor(file.unit(), nomFichier, projectFacts);
             file.unit().accept(callVisitor);
         }
+
+        int totalAppLines = 0;
+        for (ParsedFile file : files) {
+            totalAppLines += java.nio.file.Files.readAllLines(file.path()).size();
+        }
+
+        int seuilX = 5;
+        if (args.length >= 3) {
+            try {
+                seuilX = Integer.parseInt(args[2]);
+            } catch (NumberFormatException e) {
+                System.err.println("Le seuil X doit être un entier valide.");
+                System.exit(2);
+            }
+        }
+
         switch (action) {
             case "structure":
                 afficherBilanStructure(projectFacts);
@@ -77,6 +94,11 @@ public final class Main {
 
             case "calls":
                 afficherBilanAppels(projectFacts);
+                break;
+
+            case "metrics":
+                MetricsService metricsService = new MetricsService(projectFacts, totalAppLines);
+                metricsService.printMetrics(seuilX);
                 break;
 
             default:
