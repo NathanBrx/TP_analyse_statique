@@ -3,6 +3,7 @@ package hai913i.tp1;
 import java.nio.file.Path;
 import java.util.List;
 
+import hai913i.tp1.callgraph.CallGraph;
 import hai913i.tp1.metrics.MetricsService;
 import hai913i.tp1.model.*;
 import hai913i.tp1.parse.JdtParser;
@@ -99,6 +100,11 @@ public final class Main {
             case "metrics":
                 MetricsService metricsService = new MetricsService(projectFacts, totalAppLines);
                 metricsService.printMetrics(seuilX);
+                break;
+
+            case "graph":
+                CallGraph graph = new CallGraph(projectFacts);
+                graph.printGraphInfo();
                 break;
 
             default:
