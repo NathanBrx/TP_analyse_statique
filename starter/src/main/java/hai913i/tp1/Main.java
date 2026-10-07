@@ -21,6 +21,7 @@ public final class Main {
             System.err.println("Actions disponibles :");
             System.err.println("  tree      : Arbre AST (Étape A1)");
             System.err.println("  structure : Structure (Étape A2)");
+            System.err.println("  calls     : Appels de méthodes (Étape A3)");
             System.exit(2);
         }
 
@@ -59,6 +60,10 @@ public final class Main {
                 executerStructureVisitor(files);
                 break;
 
+            case "calls":
+                executerCallVisitor(files);
+                break;
+
             default:
                 System.err.println("Action non reconnue : '" + action + "'. Utilisez tree, structure, ou calls.");
                 System.exit(2);
@@ -92,4 +97,30 @@ public final class Main {
         System.out.println(structureVisitor.getNbAttributes() + " attributs");
     }
 
+    private static void executerCallVisitor(List<ParsedFile> files) {;
+        int totalAppels = 0;
+        int methodes = 0;
+        int supermethodes = 0;
+        int internes = 0;
+        int externes = 0;
+        int nonResolus = 0;
+
+        for (ParsedFile file : files) {
+            CallVisitor callVisitor = new CallVisitor(file.unit());
+            file.unit().accept(callVisitor);
+
+            totalAppels += callVisitor.getNbTotalAppels();
+            methodes += callVisitor.getNbMethodInvocations();
+            supermethodes += callVisitor.getNbSuperMethodInvocations();
+            internes += callVisitor.getNbInternes();
+            externes += callVisitor.getNbExternes();
+            nonResolus += callVisitor.getNbNonResolus();
+        }
+
+        System.out.println("\n--- BILAN DES APPELS ---");
+        System.out.println(totalAppels + " appels (" + methodes + " MethodInvocation et " + supermethodes + " SuperMethodInvocation)");
+        System.out.println(internes + " vers des méthodes du projet (internes)");
+        System.out.println(externes + " vers l'extérieur (externes)");
+        System.out.println(nonResolus + " non résolus");
+    }
 }
