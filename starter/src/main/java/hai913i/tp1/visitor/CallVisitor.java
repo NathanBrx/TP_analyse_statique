@@ -1,99 +1,119 @@
 package hai913i.tp1.visitor;
 
 import org.eclipse.jdt.core.dom.*;
+import hai913i.tp1.model.*;
+import java.util.Optional;
 
 public class CallVisitor extends ASTVisitor {
 
     private CompilationUnit unit;
     private String fileName;
-    private String currentCaller = "Hors méthode";
+    private ProjectFacts facts;
+    private String currentMethodId = "Hors méthode";
 
-    private int nbMethodInvocations = 0;
-    private int nbSuperMethodInvocations = 0;
-    private int nbInternes = 0;
-    private int nbExternes = 0;
-    private int nbNonResolus = 0;
-
-    public CallVisitor(CompilationUnit unit, String filename) {
+    public CallVisitor(CompilationUnit unit, String fileName, ProjectFacts facts) {
         this.unit = unit;
-        this.fileName = filename;
-    }
-
-    private void analyserAppel(Expression receveurExpr, IMethodBinding methodBinding, int startPosition, String nomAppel) {
-        int ligne = unit.getLineNumber(startPosition);
-
-        // appel de méthode non résolu
-        if (methodBinding == null) {
-            nbNonResolus++;
-            System.out.println("Ligne " + ligne + " : " + nomAppel + " -> NON RÉSOLU");
-            return;
-        }
-
-        IMethodBinding cible = methodBinding.getMethodDeclaration();
-        String cibleQualifiee = cible.getDeclaringClass().getQualifiedName() + "#" + cible.getName();
-
-        // type statique du receveur
-        String typeReceveur = "Inconnu";
-        if (receveurExpr != null) {
-            ITypeBinding typeBinding = receveurExpr.resolveTypeBinding();
-            if (typeBinding != null) {
-                typeReceveur = typeBinding.getErasure().getQualifiedName();
-            }
-        } else {
-            // pas de receveur explicite (this ou appel statique)
-            if (Modifier.isStatic(cible.getModifiers())) {
-                typeReceveur = cible.getDeclaringClass().getQualifiedName();
-            } else {
-                typeReceveur = cible.getDeclaringClass().getQualifiedName();
-            }
-        }
-
-        // appel interne (dans le projet) ou externe (JDK, bibliothèques)
-        boolean isInterne = cible.getDeclaringClass().isFromSource();
-        if (isInterne) {
-            nbInternes++;
-        } else {
-            nbExternes++;
-        }
-
-        System.out.println("[" + fileName + " | Ligne " + ligne + "] " + currentCaller + " ---> appelle ---> " + cibleQualifiee +
-                "\n    (Receveur : " + typeReceveur + " | Nature : " + (isInterne ? "Interne" : "Externe") + ")\n");
+        this.fileName = fileName;
+        this.facts = facts;
     }
 
     @Override
     public boolean visit(MethodDeclaration node) {
-        IMethodBinding binding = node.resolveBinding();
-        if (binding != null) {
-            currentCaller = binding.getDeclaringClass().getName() + "#" + binding.getName();
-        } else {
-            currentCaller = node.getName().getIdentifier();
+        if (currentMethodId.equals("Hors méthode")) {
+            IMethodBinding binding = node.resolveBinding();
+            if (binding != null) {
+                StringBuilder idBuilder = new StringBuilder(binding.getDeclaringClass().getQualifiedName() + "#" + binding.getName() + "(");
+                ITypeBinding[] pt = binding.getParameterTypes();
+                for (int i = 0; i < pt.length; i++) {
+                    idBuilder.append(pt[i].getErasure().getQualifiedName());
+                    if (i < pt.length - 1) idBuilder.append(",");
+                }
+                idBuilder.append(")");
+                currentMethodId = idBuilder.toString();
+            } else {
+                currentMethodId = node.getName().getIdentifier() + "()";
+            }
         }
         return true;
     }
 
     @Override
+    public void endVisit(MethodDeclaration node) {
+        if (node.getParent() instanceof TypeDeclaration || node.getParent() instanceof EnumDeclaration) {
+            currentMethodId = "Hors méthode";
+        }
+    }
+
+    private void analyserAppel(Expression receveurExpr, IMethodBinding methodBinding, int startPosition, boolean isSuper) {
+        int ligne = unit.getLineNumber(startPosition);
+
+        boolean resolved = (methodBinding != null);
+        String targetId = null;
+        String typeReceveur = "Inconnu";
+        boolean isInterne = false;
+
+        if (resolved) {
+            IMethodBinding cible = methodBinding.getMethodDeclaration();
+            isInterne = cible.getDeclaringClass().isFromSource();
+
+            StringBuilder targetIdBuilder = new StringBuilder(cible.getDeclaringClass().getQualifiedName() + "#" + cible.getName() + "(");
+            ITypeBinding[] pt = cible.getParameterTypes();
+            for (int i = 0; i < pt.length; i++) {
+                targetIdBuilder.append(pt[i].getErasure().getQualifiedName());
+                if (i < pt.length - 1) targetIdBuilder.append(",");
+            }
+            targetIdBuilder.append(")");
+            targetId = targetIdBuilder.toString();
+
+            if (receveurExpr != null && receveurExpr.resolveTypeBinding() != null) {
+                typeReceveur = receveurExpr.resolveTypeBinding().getErasure().getQualifiedName();
+            } else {
+                if (Modifier.isStatic(cible.getModifiers())) {
+                    typeReceveur = cible.getDeclaringClass().getQualifiedName();
+                } else {
+                    typeReceveur = cible.getDeclaringClass().getQualifiedName();
+                }
+            }
+        }
+
+        CallFact call = new CallFact(
+                currentMethodId,
+                Optional.ofNullable(targetId),
+                typeReceveur,
+                ligne,
+                resolved,
+                isInterne,
+                isSuper
+        );
+
+        for (TypeFact type : facts.getTypes()) {
+            for (MethodFact method : type.getMethods()) {
+                if (method.getId().equals(currentMethodId)) {
+                    method.addCall(call);
+                    return;
+                }
+            }
+        }
+    }
+
+    @Override
     public boolean visit(MethodInvocation node) {
-        nbMethodInvocations++;
+        if (currentMethodId.equals("Hors méthode")) return false;
+
         Expression receveur = node.getExpression();
         IMethodBinding binding = node.resolveMethodBinding();
 
-        analyserAppel(receveur, binding, node.getStartPosition(), node.getName().getIdentifier());
+        analyserAppel(receveur, binding, node.getStartPosition(), false);
         return true;
     }
 
     @Override
     public boolean visit(SuperMethodInvocation node) {
-        nbSuperMethodInvocations++;
+        if (currentMethodId.equals("Hors méthode")) return false;
+
         IMethodBinding binding = node.resolveMethodBinding();
 
-        analyserAppel(null, binding, node.getStartPosition(), "super." + node.getName().getIdentifier());
+        analyserAppel(null, binding, node.getStartPosition(), true);
         return true;
     }
-
-    public int getNbTotalAppels() { return nbMethodInvocations + nbSuperMethodInvocations; }
-    public int getNbMethodInvocations() { return nbMethodInvocations; }
-    public int getNbSuperMethodInvocations() { return nbSuperMethodInvocations; }
-    public int getNbInternes() { return nbInternes; }
-    public int getNbExternes() { return nbExternes; }
-    public int getNbNonResolus() { return nbNonResolus; }
 }

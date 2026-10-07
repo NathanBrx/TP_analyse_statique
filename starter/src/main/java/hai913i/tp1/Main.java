@@ -3,6 +3,7 @@ package hai913i.tp1;
 import java.nio.file.Path;
 import java.util.List;
 
+import hai913i.tp1.model.*;
 import hai913i.tp1.parse.JdtParser;
 import hai913i.tp1.parse.ProjectSources;
 import hai913i.tp1.visitor.*;
@@ -51,17 +52,31 @@ public final class Main {
         System.out.println("Racine des sources     : " + sources.sourceRoot());
         System.out.println("Unites de compilation  : " + files.size());
         System.out.println("Erreurs de compilation : " + errors);
-        switch (action) {
-            case "tree":
-                executerTreeVisitor(files);
-                break;
 
+        if (action.equals("tree")) {
+            executerTreeVisitor(files);
+            return;
+        }
+
+        ProjectFacts projectFacts = new ProjectFacts();
+
+        for (ParsedFile file : files) {
+            StructureVisitor structureVisitor = new StructureVisitor(projectFacts, file.unit());
+            file.unit().accept(structureVisitor);
+        }
+
+        for (ParsedFile file : files) {
+            String nomFichier = file.path().getFileName().toString();
+            CallVisitor callVisitor = new CallVisitor(file.unit(), nomFichier, projectFacts);
+            file.unit().accept(callVisitor);
+        }
+        switch (action) {
             case "structure":
-                executerStructureVisitor(files);
+                afficherBilanStructure(projectFacts);
                 break;
 
             case "calls":
-                executerCallVisitor(files);
+                afficherBilanAppels(projectFacts);
                 break;
 
             default:
@@ -78,26 +93,46 @@ public final class Main {
         }
     }
 
-    private static void executerStructureVisitor(List<ParsedFile> files) {
-        StructureVisitor structureVisitor = new StructureVisitor();
-        for (ParsedFile file : files) {
-            file.unit().accept(structureVisitor);
+    private static void afficherBilanStructure(ProjectFacts facts) {
+        int nbClasses = 0;
+        int nbInterfaces = 0;
+        int nbEnums = 0;
+        int nbRecords = 0;
+        int nbMethodes = 0;
+        int nbConstructors = 0;
+        int nbAttributs = 0;
+
+        for (TypeFact type : facts.getTypes()) {
+            switch (type.getKind()) {
+                case "interface": nbInterfaces++; break;
+                case "énumération": nbEnums++; break;
+                case "record": nbRecords++; break;
+                default: nbClasses++; break;
+            }
+
+            nbAttributs += type.getFields().size();
+            nbMethodes += type.getMethods().size();
+
+            for (MethodFact method : type.getMethods()) {
+                if (method.isConstructor()) {
+                    nbConstructors++;
+                }
+            }
         }
 
-        int nbTotalClasses = structureVisitor.getNbClasses() + structureVisitor.getNbEnums() + structureVisitor.getNbInterfaces();
+        int nbTotalClasses = nbClasses + nbInterfaces + nbEnums + nbRecords;
+
         System.out.println("\n--- BILAN DE STRUCTURE ---");
-        System.out.println(nbTotalClasses + " classes : " +
-                structureVisitor.getNbClasses() + " classes, " +
-                structureVisitor.getNbInterfaces() + " interfaces et " +
-                structureVisitor.getNbEnums() + " énumérations");
+        System.out.println(nbTotalClasses + " classes au total : " +
+                nbClasses + " classes, " +
+                nbInterfaces + " interfaces, " +
+                nbEnums + " énumérations");
 
-        System.out.println(structureVisitor.getNbMethodes() + " méthodes, dont " +
-                structureVisitor.getNbConstructors() + " constructeurs");
-
-        System.out.println(structureVisitor.getNbAttributes() + " attributs");
+        System.out.println(nbMethodes + " méthodes, dont " + nbConstructors + " constructeurs");
+        System.out.println(nbAttributs + " attributs");
     }
 
-    private static void executerCallVisitor(List<ParsedFile> files) {;
+    private static void afficherBilanAppels(ProjectFacts facts) {
         int totalAppels = 0;
         int methodes = 0;
         int supermethodes = 0;
@@ -105,17 +140,24 @@ public final class Main {
         int externes = 0;
         int nonResolus = 0;
 
-        for (ParsedFile file : files) {
-            String nomFichier = file.path().getFileName().toString();
-            CallVisitor callVisitor = new CallVisitor(file.unit(), nomFichier);
-            file.unit().accept(callVisitor);
-
-            totalAppels += callVisitor.getNbTotalAppels();
-            methodes += callVisitor.getNbMethodInvocations();
-            supermethodes += callVisitor.getNbSuperMethodInvocations();
-            internes += callVisitor.getNbInternes();
-            externes += callVisitor.getNbExternes();
-            nonResolus += callVisitor.getNbNonResolus();
+        for (TypeFact type : facts.getTypes()) {
+            for (MethodFact method : type.getMethods()) {
+                for (CallFact call : method.getCalls()) {
+                    totalAppels++;
+                    if (call.isSuper()) {
+                        supermethodes++;
+                    } else {
+                         methodes++;
+                    }
+                    if (!call.isResolved()) {
+                        nonResolus++;
+                    } else if (call.isInternal()) {
+                        internes++;
+                    } else {
+                        externes++;
+                    }
+                }
+            }
         }
 
         System.out.println("\n--- BILAN DES APPELS ---");

@@ -1,81 +1,80 @@
 package hai913i.tp1.visitor;
 
+import hai913i.tp1.model.*;
 import org.eclipse.jdt.core.dom.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StructureVisitor extends ASTVisitor {
-    private int nbClasses = 0;
-    private int nbEnums = 0;
-    private int nbInterfaces = 0;
-    private int nbMethodes = 0;
-    private int nbConstructors = 0;
-    private int nbAttributs = 0;
+    private ProjectFacts facts;
+    private CompilationUnit unit;
+
+    public StructureVisitor(ProjectFacts facts, CompilationUnit unit) {
+        this.facts = facts;
+        this.unit = unit;
+    }
 
     private void traiterType(AbstractTypeDeclaration node, String genre) {
-        if (node instanceof TypeDeclaration && node.isLocalTypeDeclaration()) {
-            return;
-        }
-
-        switch (genre) {
-            case "interface":
-                nbInterfaces++;
-                break;
-            case "énumération":
-                nbEnums++;
-                break;
-            default:
-                nbClasses++;
-                break;
-        }
+        if (node instanceof TypeDeclaration && node.isLocalTypeDeclaration()) return;
 
         ITypeBinding binding = node.resolveBinding();
-        if (binding != null) {
-            System.out.println("\n--- " + genre.toUpperCase() + " : " + binding.getQualifiedName() + " ---");
+        if (binding == null) return;
 
-            ITypeBinding superclass = binding.getSuperclass();
-            while (superclass != null && !superclass.getQualifiedName().equals("java.lang.Object")) {
-                System.out.println("  Hérite de : " + superclass.getQualifiedName());
-                superclass = superclass.getSuperclass();
-            }
-        }
+        String packageName = binding.getPackage() != null ? binding.getPackage().getName() : "(défaut)";
+        TypeFact typeFact = new TypeFact(binding.getQualifiedName(), packageName, genre);
 
         List<BodyDeclaration> membres = node.bodyDeclarations();
-
         for (BodyDeclaration membre : membres) {
 
             if (membre instanceof FieldDeclaration) {
                 FieldDeclaration field = (FieldDeclaration) membre;
-                nbAttributs += field.fragments().size();
+                String typeDeclare = field.getType().toString();
 
                 int modifiers = field.getModifiers();
-                String visibilite = Modifier.isPrivate(modifiers) ? "private" :
-                        Modifier.isProtected(modifiers) ? "protected" :
-                                Modifier.isPublic(modifiers) ? "public" : "package";
-
-                String typeDeclare = field.getType().toString();
+                String visibilite = Modifier.isPrivate(modifiers) ? "private" : Modifier.isProtected(modifiers) ? "protected" : Modifier.isPublic(modifiers) ? "public" : "package";
 
                 for (Object obj : field.fragments()) {
                     VariableDeclarationFragment fragment = (VariableDeclarationFragment) obj;
-                    System.out.println("  Attribut : " + fragment.getName() +
-                            " | Type : " + typeDeclare +
-                            " | Visibilité : " + visibilite);
+                    typeFact.addField(new FieldFact(fragment.getName().getIdentifier(), typeDeclare, visibilite));
                 }
             }
 
             else if (membre instanceof MethodDeclaration) {
                 MethodDeclaration method = (MethodDeclaration) membre;
-                nbMethodes++;
+                IMethodBinding methodBinding = method.resolveBinding();
 
-                if (method.isConstructor()) {
-                    nbConstructors++;
+                List<String> paramTypes = new ArrayList<>();
+                StringBuilder methodIdBuilder = new StringBuilder(binding.getQualifiedName() + "#" + method.getName().getIdentifier() + "(");
+
+                if (methodBinding != null) {
+                    ITypeBinding[] pt = methodBinding.getParameterTypes();
+                    for (int i = 0; i < pt.length; i++) {
+                        String paramName = pt[i].getErasure().getQualifiedName();
+                        paramTypes.add(paramName);
+                        methodIdBuilder.append(paramName);
+                        if (i < pt.length - 1) methodIdBuilder.append(",");
+                    }
+                }
+                methodIdBuilder.append(")");
+                String methodId = methodIdBuilder.toString();
+
+                int bodyLoc = 0;
+                if (method.getBody() != null) {
+                    int startPosition = method.getBody().getStartPosition();
+                    int length = method.getBody().getLength();
+                    int startLine = unit.getLineNumber(startPosition);
+                    int endLine = unit.getLineNumber(startPosition + length - 1);
+                    bodyLoc = endLine - startLine + 1;
                 }
 
-                System.out.println("  Méthode : " + method.getName() +
-                        " | Params : " + method.parameters().size() +
-                        (method.isConstructor() ? " | Constructeur " : ""));
+                typeFact.addMethod(new MethodFact(
+                        methodId, method.getName().getIdentifier(), paramTypes, method.isConstructor(), bodyLoc
+                ));
             }
         }
+
+        facts.addType(typeFact);
     }
 
     @Override
@@ -92,37 +91,7 @@ public class StructureVisitor extends ASTVisitor {
      }
 
      @Override
-     public boolean visit(RecordDeclaration node) {
-         traiterType(node, "record");
-        return true;
-     }
-
-     @Override
      public boolean visit(AnonymousClassDeclaration node) {
         return false;
      }
-
-    public int getNbClasses() {
-        return nbClasses;
-    }
-
-    public int getNbEnums() {
-        return nbEnums;
-    }
-
-    public int getNbInterfaces() {
-        return nbInterfaces;
-    }
-
-    public int getNbMethodes() {
-        return nbMethodes;
-    }
-
-    public int getNbAttributes() {
-        return nbAttributs;
-    }
-
-    public int getNbConstructors() {
-        return nbConstructors;
-    }
 }
