@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.9.22)  22 SEP 2026 10:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.9.22)  11 OCT 2026 21:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -397,15 +397,15 @@ Package hyperref Info: Link coloring ON on input line 5.
 \openout3 = `TP1-Analyse_statique.out'.
 
 \c@lstlisting=\count311
-<assets/UM.png, id=12, 200.75pt x 200.75pt>
+<assets/UM.png, id=100, 200.75pt x 200.75pt>
 File: assets/UM.png Graphic file (type png)
 <use assets/UM.png>
-Package pdftex.def Info: assets/UM.png  used on input line 17.
+Package pdftex.def Info: assets/UM.png  used on input line 19.
 (pdftex.def)             Requested size: 90.5922pt x 90.59396pt.
-<assets/fds.png, id=13, 225.84375pt x 225.84375pt>
+<assets/fds.png, id=101, 225.84375pt x 225.84375pt>
 File: assets/fds.png Graphic file (type png)
 <use assets/fds.png>
-Package pdftex.def Info: assets/fds.png  used on input line 18.
+Package pdftex.def Info: assets/fds.png  used on input line 20.
 (pdftex.def)             Requested size: 90.5922pt x 90.59435pt.
 
 
@@ -414,11 +414,11 @@ Package pdftex.def Info: assets/fds.png  used on input line 18.
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./assets/UM.png> <./assets
 /fds.png>] (./TP1-Analyse_statique.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 3.
+(Font)              <12> on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 3.
+(Font)              <8> on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 3.
+(Font)              <6> on input line 5.
 )
 \tf@toc=\write4
 \openout4 = `TP1-Analyse_statique.toc'.
@@ -430,7 +430,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.23 \clearpage
+l.25 \clearpage
                 [1]
 
 
@@ -438,36 +438,151 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.38 \end{document}
-                    [1
+l.45 \newpage
+              [1
 
-] (./TP1-Analyse_statique.aux)
+]
+Overfull \hbox (0.78026pt too wide) in paragraph at lines 63--66
+[]\T1/cmr/m/n/12 La classe Struc-tu-re-Vi-si-tor in-ter-cepte les Ty-pe-De-cla-
+ra-tion, Enum-De-cla-ra-tion, etc. Pour
+ []
+
+
+
+[2]
+<local_assets/etapeA0.png, id=151, 873.2625pt x 56.46094pt>
+File: local_assets/etapeA0.png Graphic file (type png)
+<use local_assets/etapeA0.png>
+Package pdftex.def Info: local_assets/etapeA0.png  used on input line 115.
+(pdftex.def)             Requested size: 452.9679pt x 29.2866pt.
+
+
+[3]
+<local_assets/etapeA1-1.png, id=158, 199.49532pt x 648.92438pt>
+File: local_assets/etapeA1-1.png Graphic file (type png)
+<use local_assets/etapeA1-1.png>
+Package pdftex.def Info: local_assets/etapeA1-1.png  used on input line 119.
+(pdftex.def)             Requested size: 135.89174pt x 442.05489pt.
+<local_assets/etapeA1-2.png, id=159, 199.49532pt x 503.63156pt>
+File: local_assets/etapeA1-2.png Graphic file (type png)
+<use local_assets/etapeA1-2.png>
+Package pdftex.def Info: local_assets/etapeA1-2.png  used on input line 119.
+(pdftex.def)             Requested size: 135.89174pt x 343.07971pt.
+
+
+[4 <./local_assets/etapeA0.png> <./local_assets/etapeA1-1.png> <./local_assets/
+etapeA1-2.png>]
+<local_assets/etapeA2-1.png, id=168, 928.97063pt x 129.48375pt>
+File: local_assets/etapeA2-1.png Graphic file (type png)
+<use local_assets/etapeA2-1.png>
+Package pdftex.def Info: local_assets/etapeA2-1.png  used on input line 123.
+(pdftex.def)             Requested size: 452.9679pt x 63.13737pt.
+<local_assets/etapeA2-2.png, id=169, 491.58656pt x 380.92313pt>
+File: local_assets/etapeA2-2.png Graphic file (type png)
+<use local_assets/etapeA2-2.png>
+Package pdftex.def Info: local_assets/etapeA2-2.png  used on input line 125.
+(pdftex.def)             Requested size: 452.9679pt x 351.0115pt.
+<local_assets/etapeA2-3.png, id=170, 476.53032pt x 240.9pt>
+File: local_assets/etapeA2-3.png Graphic file (type png)
+<use local_assets/etapeA2-3.png>
+Package pdftex.def Info: local_assets/etapeA2-3.png  used on input line 127.
+(pdftex.def)             Requested size: 452.9679pt x 229.00072pt.
+
+
+[5 <./local_assets/etapeA2-1.png> <./local_assets/etapeA2-2.png>]
+<local_assets/etapeA3-1.png, id=178, 884.55469pt x 146.04562pt>
+File: local_assets/etapeA3-1.png Graphic file (type png)
+<use local_assets/etapeA3-1.png>
+Package pdftex.def Info: local_assets/etapeA3-1.png  used on input line 131.
+(pdftex.def)             Requested size: 452.9679pt x 74.78757pt.
+<local_assets/etapeA3-2.png, id=179, 756.57657pt x 46.67438pt>
+File: local_assets/etapeA3-2.png Graphic file (type png)
+<use local_assets/etapeA3-2.png>
+Package pdftex.def Info: local_assets/etapeA3-2.png  used on input line 133.
+(pdftex.def)             Requested size: 452.9679pt x 27.94429pt.
+<local_assets/etapeA3-3.png, id=180, 756.57657pt x 46.67438pt>
+File: local_assets/etapeA3-3.png Graphic file (type png)
+<use local_assets/etapeA3-3.png>
+Package pdftex.def Info: local_assets/etapeA3-3.png  used on input line 135.
+(pdftex.def)             Requested size: 452.9679pt x 27.94429pt.
+<local_assets/etapeA3-4.png, id=181, 633.11531pt x 46.67438pt>
+File: local_assets/etapeA3-4.png Graphic file (type png)
+<use local_assets/etapeA3-4.png>
+Package pdftex.def Info: local_assets/etapeA3-4.png  used on input line 137.
+(pdftex.def)             Requested size: 452.9679pt x 33.39398pt.
+
+
+[6 <./local_assets/etapeA2-3.png> <./local_assets/etapeA3-1.png> <./local_asset
+s/etapeA3-2.png> <./local_assets/etapeA3-3.png>]
+<local_assets/etapeA3-5.png, id=190, 706.89093pt x 46.67438pt>
+File: local_assets/etapeA3-5.png Graphic file (type png)
+<use local_assets/etapeA3-5.png>
+Package pdftex.def Info: local_assets/etapeA3-5.png  used on input line 139.
+(pdftex.def)             Requested size: 452.9679pt x 29.90851pt.
+<local_assets/etapeA3-6.png, id=191, 977.15062pt x 228.855pt>
+File: local_assets/etapeA3-6.png Graphic file (type png)
+<use local_assets/etapeA3-6.png>
+Package pdftex.def Info: local_assets/etapeA3-6.png  used on input line 141.
+(pdftex.def)             Requested size: 452.9679pt x 106.08821pt.
+<local_assets/etapeB2.png, id=192, 909.3975pt x 457.71pt>
+File: local_assets/etapeB2.png Graphic file (type png)
+<use local_assets/etapeB2.png>
+Package pdftex.def Info: local_assets/etapeB2.png  used on input line 145.
+(pdftex.def)             Requested size: 452.9679pt x 227.98842pt.
+<local_assets/etapeB3.png, id=193, 888.31876pt x 130.98938pt>
+File: local_assets/etapeB3.png Graphic file (type png)
+<use local_assets/etapeB3.png>
+Package pdftex.def Info: local_assets/etapeB3.png  used on input line 149.
+(pdftex.def)             Requested size: 452.9679pt x 66.79369pt.
+
+
+[7 <./local_assets/etapeA3-4.png> <./local_assets/etapeA3-5.png> <./local_asset
+s/etapeA3-6.png> <./local_assets/etapeB2.png>]
+<../../starter/callgraph.png, id=202, 6994.13pt x 502.87875pt>
+File: ../../starter/callgraph.png Graphic file (type png)
+<use ../../starter/callgraph.png>
+Package pdftex.def Info: ../../starter/callgraph.png  used on input line 151.
+(pdftex.def)             Requested size: 452.9679pt x 32.56549pt.
+<local_assets/etapeB4.png, id=203, 1037.37563pt x 403.5075pt>
+File: local_assets/etapeB4.png Graphic file (type png)
+<use local_assets/etapeB4.png>
+Package pdftex.def Info: local_assets/etapeB4.png  used on input line 155.
+(pdftex.def)             Requested size: 452.9679pt x 176.19545pt.
+
+
+[8 <./local_assets/etapeB3.png> <../../starter/callgraph.png> <./local_assets/e
+tapeB4.png>]
+
+[9] (./TP1-Analyse_statique.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `TP1-Analyse_statique.out' has not changed.
-(rerunfilecheck)             Checksum: 5ECF05A7CA2CF898C66BA6089108C96C;153.
+(rerunfilecheck)             Checksum: 9689BEA20CE065F893971EA1657011BE;2499.
  ) 
 Here is how much of TeX's memory you used:
- 12924 strings out of 474503
- 205629 string characters out of 5746475
- 613594 words of memory out of 5000000
- 35814 multiletter control sequences out of 15000+600000
- 567751 words of font info for 53 fonts, out of 8000000 for 9000
+ 13105 strings out of 474503
+ 210269 string characters out of 5746475
+ 619785 words of memory out of 5000000
+ 35963 multiletter control sequences out of 15000+600000
+ 568429 words of font info for 55 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
- 90i,5n,93p,536b,493s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.60
-0pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.
-600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx120
-0.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1
-440.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecb
-x1728.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/e
-cbx2074.600pk>
-Output written on TP1-Analyse_statique.pdf (3 pages, 61711 bytes).
+ 90i,6n,93p,580b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.60
+0pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.
+600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm120
+0.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1
+200.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/tcr
+m1440.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/e
+crm1440.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec
+/ecbx1728.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/
+ec/ecbx2074.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi12.pfb>
+Output written on TP1-Analyse_statique.pdf (11 pages, 903251 bytes).
 PDF statistics:
- 180 PDF objects out of 1000 (max. 8388607)
- 49 compressed objects within 1 object stream
- 5 named destinations out of 1000 (max. 500000)
- 27 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 522 PDF objects out of 1000 (max. 8388607)
+ 203 compressed objects within 3 object streams
+ 35 named destinations out of 1000 (max. 500000)
+ 283 words of extra memory for PDF output out of 10000 (max. 10000000)
 

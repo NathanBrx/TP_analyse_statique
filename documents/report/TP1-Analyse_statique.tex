@@ -6,13 +6,15 @@
 
 \begin{titlepage}
     \centering
-    {\LARGE\textbf{TP1 - HAI913I\\Evolution et restructuration des logiciels}\par}
+    {\LARGE\textbf{HAI913I\\Evolution et restructuration des logiciels}\par}
     \vspace{1cm}
-    {\LARGE\textbf{Analyse statique}\par}
+    {\LARGE\textbf{TP1 - Analyse statique}\par}
     \vspace{1cm}
-    {\Large\textbf{Nathan Boureux}\par}
+    {\Large\textbf{Nathan Boureux - M2 GL}\par}
+    \vspace{0.1cm}
+    {\large{N° étudiant : 22206444}\par}
     \vfill
-    {\large{Master 2 Informatique, parcours Génie Logiciel}\par}
+    {\large{Enseignant responsable : Bachar Rima\\Année universitaire 2026–2027}\par}
     \vspace{0.5cm}
     \includegraphics[width=0.2\textwidth]{assets/UM.png}
     \includegraphics[width=0.2\textwidth]{assets/fds.png}
@@ -23,16 +25,159 @@
 \clearpage
 \pagenumbering{arabic}
 
-\section{Partie A}
+\section{Objectif et périmètre}
 
-\subsection{A1}
+L'outil développé au cours de ce tp est une outil d'analyse statique de code Java, utilisable en ligne de commande. L'objectif est d'extraire la structure du code (classes, méthodes, attributs, etc), de modéliser les appels de méthodes, de calculer un ensemble de métriques logicielles, et de générer un graphe d'appels.
+
+L'outil prend en charge les objets Java standards (classes, interfaces, énumérations, etc), les invocations de méthodes classiques et de super-classes et les appels de constructeurs.
+
+\section{Conception générale}
+
+L'architecture repose sur trois parties distinctes :
+
+\begin{itemize}
+	\item Analyse syntaxique (JDT) : Utilisation de Eclipse JDT pour parser les fichiers sources en Arbres de Syntaxe Abstraite (AST) avec résolution des liaisons (bindings).
+
+	\item Extraction et Modélisation (Visiteurs) : Deux passes successives avec deux visiteurs différents (StructureVisitor puis CallVisitor). Ils parcourent l'AST pour instancier un modèle de faits personnalisé composé de POJO (ProjectFacts, TypeFact, MethodFact, CallFact).
+
+	\item Exploitation (Services) : Les métriques et la génération du graphe utilisent exclusivement le modèle de faits, pour ne pas réutiliser l'API JDT (ne pas avoir ni à regénérer les AST, ni à les parcourir).
+\end{itemize}
+\newpage
+\section{Réponses}
+
+\subsection{Partie A}
+
+\subsubsection{A1}
+
+La création de l'arbre a été faite via un simple ASTVisitor surchargeant preVisit pour indenter l'affichage en fonction de la profondeur du nœud.
+
+\noindent
+\textbf{Rôle de la valeur renvoyée par visit(...), et ce que change return false :}
 
 Dans JDT, l'infrastructure visite les enfants d'un nœud si et seulement si la méthode visit a renvoyé true.
 
-Renvoyer false élague le sous-arbre : cela signifie que le visiteur ne descendra pas dans les enfants de ce nœud.
+Renvoyer false "supprime" le sous-arbre : le visiteur ne descendra pas dans les enfants de ce nœud.
 
-Cependant, même si tu renvoies false, la méthode endVisit sera tout de même appelée pour ce nœud.
+\subsubsection{A2}
 
-C'est exactement ce mécanisme qui permet, par exemple, d'ignorer volontairement le corps d'une classe anonyme lors du parcours.  
+La classe StructureVisitor intercepte les TypeDeclaration, EnumDeclaration, etc. 
+Pour différencier classes et interfaces, la méthode node.isInterface() est évaluée. 
+Les constructeurs sont identifiés nativement via MethodDeclaration.isConstructor()
+
+\subsubsection{A3}
+
+La classe CallVisitor intercepte les MethodInvocation et SuperMethodInvocation.
+La difficulté majeure a été de déterminer si un appel était interne ou externe.
+La solution a consisté à résoudre le binding de la méthode (resolveMethodBinding()), puis à extraire sa classe déclarante, et enfin à évaluer IMethodBinding.getDeclaringClass().isFromSource()
+
+\subsubsection{B1}
+
+Création des objets du modèle de faits. La construction se fait en deux passes de visite, d'abord StructureVisitor puis Callvisitor, qui instancient puis remplissent le modèle de faits.
+
+\subsubsection{B2}
+
+Pour calculer le nombre de lignes par méthode sans inclure l'accolade fermante (qui fausse les moyennes), j'ai récupéré la position du nœud Block, calculé la position du dernier caractère utile (startPosition + length - 1), puis converti ces index en numéros de ligne via CompilationUnit.getLineNumber().
+
+Pour extraire les 10\% supérieurs en gérant les ex æquo, j'ai implémenté une méthode générique. Elle trie les éléments par ordre décroissant, calcule un index avec la valeur entière de la fonction plafond (n + 9) / 10, récupère la valeur à cet index, puis filtre toute la liste avec la condition valeur >= seuil et valeur > 0.
+
+\subsubsection{B3}
+
+J'ai utilisé deux structures Map<String, Integer Map<String,>> : outgoingEdges (arcs sortants) et incomingEdges (arcs entrants). Lors du parcours des CallFact, si un appel interne est détecté, le poids de l'arc correspondant est incrémenté via Map.merge(cible, 1, Integer::sum).
+
+J'ai opté pour le format DOT pour l'export du graphe d'appel pour la facilité de production d'un graphe directement exploitable pour le rapport (fichier png). Le format DOT gère nativement les nœuds, les arcs orientés et leurs poids, et peut être converti très facilement en image png, sans nécessiter le développement d'un parseur ou d'une interface graphique supplémentaire.
+
+\subsubsection{B4}
+
+Le point d'entrée Main valide le nombre d'arguments et l'existence du dossier via l'API java.nio.file.Files. Les erreurs de compilation du code source analysé sont interceptées en itérant sur CompilationUnit.getProblems(). Si le problème renvoie isError() == true, il est loggué dans System.err, mais le visiteur est tout de même exécuté, garantissant une analyse en best-effort. Les erreurs de parsing d'arguments (comme un $X$ non numérique) sont capturées via des try-catch et terminent le programme avec System.exit(2).
+
+\section{Architecture et diagrammes}
+
+L'application est structurée en cinq packages principaux :
+
+\begin{itemize}
+	\item tp1 : Contient le Main (CLI et orchestration)
+
+	\item tp1.parse : Configuration de l'analyseur JDT
+
+    \item tp1.visitor : Contient StructureVisitor, CallVisitor et PrintTreeVisitor
+
+    \item tp1.model : Les entités du modèle de faits
+
+    \item tp1.metrics : Service de calculs et d'affichage des métriques
+    
+    \item tp1.callgraph : Service de construction du graphe sous la forme d'un fichier DOT
+\end{itemize}
+
+\section{Validation}
+
+\subsection{Étape A0}
+
+\insertimage{local_assets/etapeA0.png}{On a bien 14 unités de compilation et 0 erreur sur le projet de validation}
+
+\subsection{Étape A1}
+
+\inserttwobigimages{local_assets/etapeA1-1.png}{local_assets/etapeA1-2.png}{Pour Dvd.java, l’arbre montre bien un TypeDeclaration, un FieldDeclaration et trois MethodDeclaration (dont le constructeur, qui contient un SuperConstructorInvocation). Pour Category.java, la racine du type est un EnumDeclaration}
+
+\subsection{Étape A2}
+
+\insertimage{local_assets/etapeA2-1.png}{On a bien 15 classes : 12 classes, 2 interfaces, 1 énumération ; 59 méthodes, dont 9 constructeurs ; 21 attributs dans le projet de validation}
+
+\insertimage{local_assets/etapeA2-2.png}{LoanService : 6 méthodes et 5 attributs, LoanService.Loan : 4 méthodes et 3 attributs, Superclasses de library.service.LoanException : java.lang.Exception, java.lang.Throwable}
+
+\insertimage{local_assets/etapeA2-3.png}{Attributs de library.model.Item : MAX\_LOAN\_DAYS (public), id et title (protected), borrower (private), category (package)}
+
+\subsection{Étape A3}
+
+\insertimage{local_assets/etapeA3-1.png}{On a bien 94 appels (93 MethodInvocation et 1 SuperMethodInvocation) : 46 vers des méthodes du projet, 48 vers l’extérieur, 0 non résolus dans le projet de validation}
+
+\insertimage{local_assets/etapeA3-2.png}{LoanService.borrow, ligne 36, loanable.checkOut(member) : receveur library.model.Loanable}
+
+\insertimage{local_assets/etapeA3-3.png}{LibraryApp.main, ligne 32, getTitle() : receveur library.model.Book, cible library.model.Item\#getTitle()}
+
+\insertimage{local_assets/etapeA3-4.png}{Book.describe, ligne 32, super.describe() : receveur library.model.Item}
+
+\insertimage{local_assets/etapeA3-5.png}{Catalog.available, ligne 37, item.isAvailable() : receveur library.model.Item}
+
+\insertimage{local_assets/etapeA3-6.png}{Sur resources/robustness/missing-dep : l’appel à StringUtils.capitalize est signalé non résolu, l’appel à formatter.decorate est résolu, et l’analyse va jusqu’au bout}
+
+\subsection{Étape B2}
+
+\insertimage{local_assets/etapeB2.png}{On a bien les mêmes métriques que sur le sujet}
+
+\subsection{Étape B3}
+
+\insertimage{local_assets/etapeB3.png}{59 nœuds, 44 arcs, 46 sites d’appel internes, 48 appels externes, 0 appel non résolu}
+
+\insertimage{../../starter/callgraph.png}{Le graphe d'appel généré en dot puis transformé en png pour être affiché. Catalog\#add(Item,Item) → Catalog\#add(Item) de poids 2 ; TextUtils\#repeat s’appelle lui-même. Appelantes de Loanable\#checkOut(Member) : LoanService\#borrow seulement ; Item\#checkOut(Member) n’a aucune appelante}
+
+\subsection{Étape B4}
+
+\insertimage{local_assets/etapeB4.png}{Les tests de robustesse passent tous}
+
+\section{Difficultés}
+
+La détermination de la portée des appels a posé des difficultés. Les initialisations d'attributs au niveau de la classe (ex: List<String> list = new ArrayList<>();) génèrent des nœuds d'invocation en dehors de tout bloc de méthode. Pour pallier ce problème, un mécanisme d'état (currentMethodId) a été implémenté dans le CallVisitor pour ignorer ces appels, respectant ainsi la sémantique stricte d'un graphe d'appel de méthodes.
+
+\section{Utilisation de l'IA}
+
+Un modèle LLM (Gemini 3.1 Pro) a été utilisé ponctuellement comme assistant de développement :
+
+Pour la génération rapide des classes pour le modèle de faits, l'aide au développement de l'algorithme textuel des 10\%, et aide pour l'export en DOT.
+
+Tout le code généré a bien sûr été vérifié et modifié/corrigé manuellement, car l'IA proposait parfois des suggestions qui n'avaient aucun rapport avec le sujet. L'architecture en "deux passes" (Structure puis Appels) est un choix proposé par l'IA, le reste de la conception est personnelle.
+
+\section{Regard critique}
+
+L'analyse statique pure développée ici fonctionne, mais on en détecte aussi les limites :
+
+\begin{itemize}
+	\item L'outil identifie le type statique du receveur. Dans le cas d'une interface ayant de multiples implémentations, le graphe d'appel ne trace l'arc que vers la méthode de l'interface, ignorant le comportement dynamique réel, ce qui est normal mais donc ne suffit pas pour une analyse complète.
+
+    \item Les métriques ne sont pas forcément toutes pertinentes : Les lignes de code physiques (Files.readAllLines) sont fortement influencées par le style de formatage. Une métrique basée sur les lignes logiques (nombre d'instructions ou de points-virgules) ou sur le nombre de blocs complexes (if, while, switch, etc) fournirait une évaluation beaucoup plus fiable de la maintenabilité des méthodes
+\end{itemize}
+
+\section{Conclusion}
+
+Ce projet a permis de construire un outil d'analyse statique fonctionnel, robuste et respectueux des principes d'architecture logicielle (séparation des préoccupations). Le remplacement progressif d'une analyse directe sur l'AST par un modèle de faits intermédiaire a prouvé son efficacité, permettant de diminuer la quantité de calculs. L'outil valide l'intégralité des points de contrôle et est une bonne base pour les prochains TP.
 
 \end{document}
