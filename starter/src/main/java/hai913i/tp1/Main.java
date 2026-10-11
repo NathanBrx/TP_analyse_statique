@@ -153,7 +153,11 @@ public final class Main {
         int nbConstructors = 0;
         int nbAttributs = 0;
 
+        System.out.println("\n--- DÉTAIL DE LA STRUCTURE ---");
+
         for (TypeFact type : facts.getTypes()) {
+            System.out.println("\n" + type.getKind().toUpperCase() + " : " + type.getQualifiedName());
+
             switch (type.getKind()) {
                 case "interface": nbInterfaces++; break;
                 case "énumération": nbEnums++; break;
@@ -163,9 +167,16 @@ public final class Main {
             nbAttributs += type.getFields().size();
             nbMethodes += type.getMethods().size();
 
+            for (FieldFact field : type.getFields()) {
+                System.out.println("  - Attribut : " + field.getName() + " (" + field.getDeclaredType() + ") [" + field.getVisibility() + "]");
+            }
+
             for (MethodFact method : type.getMethods()) {
                 if (method.isConstructor()) {
                     nbConstructors++;
+                    System.out.println("  - Constructeur : " + method.getName());
+                } else {
+                    System.out.println("  - Méthode : " + method.getName());
                 }
             }
         }
@@ -190,6 +201,8 @@ public final class Main {
         int externes = 0;
         int nonResolus = 0;
 
+        System.out.println("\n--- DÉTAIL DES APPELS ---");
+
         for (TypeFact type : facts.getTypes()) {
             for (MethodFact method : type.getMethods()) {
                 for (CallFact call : method.getCalls()) {
@@ -201,11 +214,18 @@ public final class Main {
                     }
                     if (!call.isResolved()) {
                         nonResolus++;
+                        System.out.println("[Ligne " + call.getSourceLine() + "] " + call.getCallerId() + " ---> NON RÉSOLU");
                     } else if (call.isInternal()) {
                         internes++;
                     } else {
                         externes++;
                     }
+                    String cible = call.getTargetId().orElse("Inconnu");
+                    String nature = call.isInternal() ? "Interne" : "Externe";
+                    String typeAppel = call.isSuper() ? "super(...)" : "méthode classique";
+
+                    System.out.println("[Ligne " + call.getSourceLine() + "] " + call.getCallerId() + " ---> appelle ---> " + cible);
+                    System.out.println("    (Receveur : " + call.getStaticReceiverType() + " | Nature : " + nature + " | Type d'appel : " + typeAppel + ")\n");
                 }
             }
         }
