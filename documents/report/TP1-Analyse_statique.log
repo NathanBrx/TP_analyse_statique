@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.9.22)  11 OCT 2026 21:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.9.22)  11 OCT 2026 23:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -558,31 +558,39 @@ tapeB4.png>]
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-Package rerunfilecheck Info: File `TP1-Analyse_statique.out' has not changed.
-(rerunfilecheck)             Checksum: 9689BEA20CE065F893971EA1657011BE;2499.
+
+
+Package rerunfilecheck Warning: File `TP1-Analyse_statique.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `TP1-Analyse_statique.out':
+(rerunfilecheck)             Before: 9689BEA20CE065F893971EA1657011BE;2499
+(rerunfilecheck)             After:  02DA414D175BBBCDF9589EC9683B3849;2574.
  ) 
 Here is how much of TeX's memory you used:
- 13105 strings out of 474503
- 210269 string characters out of 5746475
+ 13109 strings out of 474503
+ 210310 string characters out of 5746475
  619785 words of memory out of 5000000
- 35963 multiletter control sequences out of 15000+600000
- 568429 words of font info for 55 fonts, out of 8000000 for 9000
+ 35965 multiletter control sequences out of 15000+600000
+ 568742 words of font info for 56 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
  90i,6n,93p,580b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.60
-0pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.
-600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm120
-0.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1
-200.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/tcr
-m1440.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/e
+ </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.60
+0pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.
+600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx144
+0.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1
+200.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecb
+x1200.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/t
 crm1440.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec
-/ecbx1728.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/
-ec/ecbx2074.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi12.pfb>
-Output written on TP1-Analyse_statique.pdf (11 pages, 903251 bytes).
+/ecrm1440.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/
+ec/ecbx1728.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappe
+n/ec/ecbx2074.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmmi12.pfb>
+Output written on TP1-Analyse_statique.pdf (11 pages, 911899 bytes).
 PDF statistics:
- 522 PDF objects out of 1000 (max. 8388607)
- 203 compressed objects within 3 object streams
- 35 named destinations out of 1000 (max. 500000)
+ 557 PDF objects out of 1000 (max. 8388607)
+ 209 compressed objects within 3 object streams
+ 36 named destinations out of 1000 (max. 500000)
  283 words of extra memory for PDF output out of 10000 (max. 10000000)
 
