@@ -1,56 +1,41 @@
-# HAI913I — TP1 Analyse statique — squelette de départ
+# Java Static Analyzer
 
-Squelette Maven **facultatif** pour démarrer le TP1. Il ne contient **aucune** partie évaluée :
-ni extraction de structure, ni appels, ni métriques, ni graphe d'appel. Il fournit seulement un
-environnement qui compile, une configuration `ASTParser` qui résout les bindings, et un test de
-fumée correspondant au **point de contrôle A0**.
+## Description
+Cet outil en ligne de commande permet d'effectuer une analyse statique de projets Java. Basé sur Eclipse JDT, il extrait la structure du code, analyse les appels de méthodes, calcule des métriques logicielles et génère un graphe d'appel exportable au format DOT.
 
-Vous pouvez aussi partir de zéro : dans ce cas, reprenez au minimum les réglages de
-`JdtParser` et vérifiez-les avec le projet de validation.
+## Prérequis
+- Java Development Kit (JDK) 11 ou supérieur.
+- Apache Maven.
 
-## Versions testées
+## Compilation
+Pour construire le projet depuis un état propre, exécutez la commande suivante à la racine du dépôt :
 
-| Élément          | Version                                             |
-|------------------|-----------------------------------------------------|
-| JDK              | 17 (minimum) — testé avec 17.0.10 et 21.0.5         |
-| Maven            | 3.9.6                                               |
-| Eclipse JDT Core | `org.eclipse.jdt:org.eclipse.jdt.core:3.46.0`       |
-| JUnit Jupiter    | 5.14.4                                              |
+```bash
+mvn clean package
+```
+Cela générera une archive exécutable dans le dossier `target/` (par exemple : `target/hai913i-tp1-analyzer.jar`).
 
-## Commandes
+## Utilisation
+La syntaxe générale de l'outil est la suivante :
 
-```text
-mvn clean test          # compile et lance le test de fumée (A0)
-mvn clean package       # produit target/hai913i-tp1-analyzer.jar
-java -jar target/hai913i-tp1-analyzer.jar ../resources/validation
+```bash
+java -jar target/hai913i-tp1-analyzer.jar <CHEMIN_DU_PROJET_A_ANALYSER> <ACTION> [SEUIL_X]
 ```
 
-Sous Windows, entourez de guillemets les chemins qui contiennent des espaces :
+### Actions disponibles
+- `tree` : Affiche l'arbre syntaxique abstrait (AST) des fichiers sources.
+- `structure` : Affiche le bilan structurel (nombre de classes, interfaces, énumérations, méthodes, attributs).
+- `calls` : Affiche le bilan des appels de méthodes (internes, externes, non résolus, super-méthodes).
+- `metrics` : Calcule et affiche les 13 métriques logicielles. Le paramètre optionnel `[SEUIL_X]` (entier, par défaut 5) est utilisé pour identifier les classes ayant plus de X méthodes.
+- `graph` : Génère le graphe d'appel en console et l'exporte dans un fichier `callgraph.dot` exploitable avec Graphviz.
 
-```text
-java -jar target\hai913i-tp1-analyzer.jar "C:\Mes cours\HAI913I\validation"
+### Exemple
+```bash
+java -jar target/hai913i-tp1-analyzer.jar /chemin/vers/mon/projet metrics 10
 ```
 
-Sortie attendue sur le projet de validation :
-
-```text
-Racine des sources     : ...\validation\src
-Unites de compilation  : 14
-Erreurs de compilation : 0
-```
-
-## Organisation
-
-```text
-src/main/java/hai913i/tp1/Main.java               point d'entrée (lit les arguments, délègue)
-src/main/java/hai913i/tp1/parse/ProjectSources.java   racine des sources et fichiers .java
-src/main/java/hai913i/tp1/parse/JdtParser.java        configuration d'ASTParser (bindings)
-src/test/java/hai913i/tp1/ParserSmokeTest.java        point de contrôle A0
-src/test/resources/sample/                            mini-projet de deux fichiers
-```
-
-Ajoutez vos propres paquetages (par exemple `model`, `extraction`, `metrics`, `callgraph`,
-`report`) : l'organisation est libre, mais elle doit rester lisible et justifiée dans le compte rendu.
-
-Ce `README.md` décrit le squelette ; le README demandé dans le livrable est **le vôtre** et doit
-décrire votre analyseur (voir le sujet, section « Livrables »).
+## Traitement des erreurs
+L'outil est conçu pour être robuste :
+- **Dossier inexistant ou sans sources :** L'outil affiche un message explicite sur la sortie d'erreur (`System.err`) et s'arrête avec un code de sortie non nul.
+- **Erreurs de syntaxe dans le projet analysé :** Si des fichiers `.java` contiennent des erreurs de syntaxe, l'outil les signale mais continue l'analyse sur les parties valides du code (best-effort).
+- **Arguments malformés :** Si le seuil X n'est pas un entier valide, un refus explicite est affiché et le programme s'arrête proprement.
