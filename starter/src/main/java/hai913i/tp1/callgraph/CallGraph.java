@@ -58,7 +58,7 @@ public class CallGraph {
     }
 
     public void printGraphInfo() {
-        System.out.println("\n=== B3 : GRAPHE D'APPEL ===");
+        System.out.println("\n--- GRAPHE D'APPEL ---");
         System.out.println(nodes.size() + " nœuds, " + nbArcs + " arcs, " + nbInternalSites + " sites d'appel internes");
         System.out.println(nbExternalCalls + " appels externes, " + nbUnresolvedCalls + " appels non résolus");
 

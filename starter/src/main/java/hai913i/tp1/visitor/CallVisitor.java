@@ -7,13 +7,11 @@ import java.util.Optional;
 public class CallVisitor extends ASTVisitor {
 
     private CompilationUnit unit;
-    private String fileName;
     private ProjectFacts facts;
     private String currentMethodId = "Hors méthode";
 
-    public CallVisitor(CompilationUnit unit, String fileName, ProjectFacts facts) {
+    public CallVisitor(CompilationUnit unit, ProjectFacts facts) {
         this.unit = unit;
-        this.fileName = fileName;
         this.facts = facts;
     }
 

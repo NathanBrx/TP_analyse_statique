@@ -1,5 +1,7 @@
 package hai913i.tp1;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -19,47 +21,69 @@ public final class Main {
     }
 
     public static void main(String[] args) throws Exception {
+        // vérification nb arguments ligne de commande
         if (args.length < 2) {
-            System.err.println("Usage : java -jar target/hai913i-tp1-analyzer.jar <DOSSIER_DU_PROJET> <ACTION>");
-            System.err.println("Actions disponibles :");
-            System.err.println("  tree      : Arbre AST (Étape A1)");
-            System.err.println("  structure : Structure (Étape A2)");
-            System.err.println("  calls     : Appels de méthodes (Étape A3)");
-            System.exit(2);
+            afficherUsageEtQuitter("Erreur : Nombre d'arguments insuffisant.");
         }
 
         Path project = Path.of(args[0]);
         String action = args[1].toLowerCase();
+
+        // vérification dossier existant
+        if (!Files.exists(project) || !Files.isDirectory(project)) {
+            afficherUsageEtQuitter("Erreur : Le dossier spécifié n'existe pas ou n'est pas un répertoire valide : " + project);
+        }
+
         ProjectSources sources;
 
+        // vérification sources valides
         try {
             sources = ProjectSources.of(project);
         } catch (IllegalArgumentException e) {
-            System.err.println("Erreur : " + e.getMessage());
+            System.err.println("Erreur lors de la lecture des sources : " + e.getMessage());
             System.exit(3);
             return;
         }
 
-        List<ParsedFile> files = JdtParser.parse(sources, List.of());
+        // vérification parsing des sources possible
+        List<ParsedFile> files;
+        try {
+            files = JdtParser.parse(sources, List.of());
+        } catch (Exception e) {
+            System.err.println("Erreur lors du parsing JDT : " + e.getMessage());
+            System.exit(3);
+            return;
+        }
+
+        // pas de fichier java présent
+        if (files.isEmpty()) {
+            System.err.println("Erreur : Aucun fichier source .java n'a été trouvé dans le dossier : " + project);
+            System.exit(3);
+        }
+
+        // décompte des erreurs sans arrêter l'analyse
         int errors = 0;
         for (ParsedFile file : files) {
             for (IProblem problem : file.unit().getProblems()) {
                 if (problem.isError()) {
                     errors++;
-                    System.err.println(file.path().getFileName() + ":" + problem.getSourceLineNumber() + " "
-                            + problem.getMessage());
+                    System.err.println(file.path().getFileName() + ":" + problem.getSourceLineNumber() + " " + problem.getMessage());
                 }
             }
         }
+
+        // premier bilan
         System.out.println("Racine des sources     : " + sources.sourceRoot());
         System.out.println("Unites de compilation  : " + files.size());
         System.out.println("Erreurs de compilation : " + errors);
 
+        // affichage arbre ast
         if (action.equals("tree")) {
             executerTreeVisitor(files);
             return;
         }
 
+        // construction modèle de faits
         ProjectFacts projectFacts = new ProjectFacts();
 
         for (ParsedFile file : files) {
@@ -68,26 +92,11 @@ public final class Main {
         }
 
         for (ParsedFile file : files) {
-            String nomFichier = file.path().getFileName().toString();
-            CallVisitor callVisitor = new CallVisitor(file.unit(), nomFichier, projectFacts);
+            CallVisitor callVisitor = new CallVisitor(file.unit(), projectFacts);
             file.unit().accept(callVisitor);
         }
 
-        int totalAppLines = 0;
-        for (ParsedFile file : files) {
-            totalAppLines += java.nio.file.Files.readAllLines(file.path()).size();
-        }
-
-        int seuilX = 5;
-        if (args.length >= 3) {
-            try {
-                seuilX = Integer.parseInt(args[2]);
-            } catch (NumberFormatException e) {
-                System.err.println("Le seuil X doit être un entier valide.");
-                System.exit(2);
-            }
-        }
-
+        // traitement de l'action entrée
         switch (action) {
             case "structure":
                 afficherBilanStructure(projectFacts);
@@ -98,6 +107,22 @@ public final class Main {
                 break;
 
             case "metrics":
+                int seuilX = 5;
+                if (args.length >= 3) {
+                    try {
+                        seuilX = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        afficherUsageEtQuitter("Erreur : Le seuil X doit être un entier valide.");
+                    }
+                }
+
+                int totalAppLines = 0;
+                for (ParsedFile file : files) {
+                    try {
+                        totalAppLines += Files.readAllLines(file.path()).size();
+                    } catch (IOException ignored) {}
+                }
+
                 MetricsService metricsService = new MetricsService(projectFacts, totalAppLines);
                 metricsService.printMetrics(seuilX);
                 break;
@@ -108,8 +133,7 @@ public final class Main {
                 break;
 
             default:
-                System.err.println("Action non reconnue : '" + action + "'. Utilisez tree, structure, ou calls.");
-                System.exit(2);
+                afficherUsageEtQuitter("Action non reconnue : " + action);
         }
     }
 
@@ -125,7 +149,6 @@ public final class Main {
         int nbClasses = 0;
         int nbInterfaces = 0;
         int nbEnums = 0;
-        int nbRecords = 0;
         int nbMethodes = 0;
         int nbConstructors = 0;
         int nbAttributs = 0;
@@ -134,7 +157,6 @@ public final class Main {
             switch (type.getKind()) {
                 case "interface": nbInterfaces++; break;
                 case "énumération": nbEnums++; break;
-                case "record": nbRecords++; break;
                 default: nbClasses++; break;
             }
 
@@ -148,7 +170,7 @@ public final class Main {
             }
         }
 
-        int nbTotalClasses = nbClasses + nbInterfaces + nbEnums + nbRecords;
+        int nbTotalClasses = nbClasses + nbInterfaces + nbEnums;
 
         System.out.println("\n--- BILAN DE STRUCTURE ---");
         System.out.println(nbTotalClasses + " classes au total : " +
@@ -193,5 +215,17 @@ public final class Main {
         System.out.println(internes + " vers des méthodes du projet (internes)");
         System.out.println(externes + " vers l'extérieur (externes)");
         System.out.println(nonResolus + " non résolus");
+    }
+
+    public static void afficherUsageEtQuitter(String errorMessage) {
+        System.err.println(errorMessage + "\n");
+        System.err.println("Usage : java -jar target/hai913i-tp1-analyzer.jar <DOSSIER_DU_PROJET> <ACTION>");
+        System.err.println("Actions disponibles :");
+        System.err.println("  tree      : Arbre AST (Étape A1)");
+        System.err.println("  structure : Structure (Étape A2)");
+        System.err.println("  calls     : Appels de méthodes (Étape A3)");
+        System.err.println("  metrics   : Calcul des 13 métriques (Étape B2) [SEUIL_X optionnel, par défaut=5]");
+        System.err.println("  graph     : Génération du graphe d'appel et export DOT (Étape B3)");
+        System.exit(2);
     }
 }

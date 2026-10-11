@@ -82,7 +82,7 @@ public class MetricsService {
 
         List<TypeFact> classesMoreThanX = facts.getTypes().stream()
                 .filter(t -> t.getMethods().size() > x)
-                .collect(Collectors.toList());
+                .toList();
         System.out.println("11. Classes avec plus de X=" + x + " méthodes : " + 
             classesMoreThanX.stream().map(TypeFact::getQualifiedName).collect(Collectors.joining(", ")));
 
