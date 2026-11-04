@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import hai913i.tp1.callgraph.CallGraph;
+import hai913i.tp1.export.FactsCsvExporter;
 import hai913i.tp1.metrics.MetricsService;
 import hai913i.tp1.model.*;
 import hai913i.tp1.parse.JdtParser;
@@ -130,6 +131,12 @@ public final class Main {
             case "graph":
                 CallGraph graph = new CallGraph(projectFacts);
                 graph.printGraphInfo();
+                break;
+
+            case "export":
+                Path outputDir = Path.of("../../TP_comprehension_architecture/resources-TP1");
+                FactsCsvExporter.export(projectFacts, outputDir, "facts-projet");
+                System.out.println("Faits exportés avec succès dans : " + outputDir.toAbsolutePath());
                 break;
 
             default:
