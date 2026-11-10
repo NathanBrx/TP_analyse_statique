@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.9.22)  11 OCT 2026 23:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian) (preloaded format=pdflatex 2026.11.5)  5 NOV 2026 18:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -39,7 +39,7 @@ Package: babel 2025/02/14 v25.4 The multilingual framework for pdfLaTeX, LuaLaT
 eX and XeLaTeX
 \babel@savecnt=\count270
 \U@D=\dimen142
-\l@unhyphenated=\language36
+\l@unhyphenated=\language7
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read2
@@ -48,9 +48,9 @@ eX and XeLaTeX
 (/usr/share/texlive/texmf-dist/tex/generic/babel-french/french.ldf
 Language: french 2024-07-25 v3.6c French support from the babel system
 Package babel Info: Hyphen rules for 'acadian' set to \l@french
-(babel)             (\language29). Reported on input line 91.
+(babel)             (\language5). Reported on input line 91.
 Package babel Info: Hyphen rules for 'canadien' set to \l@french
-(babel)             (\language29). Reported on input line 92.
+(babel)             (\language5). Reported on input line 92.
 \FB@stdchar=\count272
 Package babel Info: Making : an active character on input line 421.
 Package babel Info: Making ; an active character on input line 422.
@@ -397,12 +397,12 @@ Package hyperref Info: Link coloring ON on input line 5.
 \openout3 = `TP1-Analyse_statique.out'.
 
 \c@lstlisting=\count311
-<assets/UM.png, id=100, 200.75pt x 200.75pt>
+<assets/UM.png, id=104, 200.75pt x 200.75pt>
 File: assets/UM.png Graphic file (type png)
 <use assets/UM.png>
 Package pdftex.def Info: assets/UM.png  used on input line 19.
 (pdftex.def)             Requested size: 90.5922pt x 90.59396pt.
-<assets/fds.png, id=101, 225.84375pt x 225.84375pt>
+<assets/fds.png, id=105, 225.84375pt x 225.84375pt>
 File: assets/fds.png Graphic file (type png)
 <use assets/fds.png>
 Package pdftex.def Info: assets/fds.png  used on input line 20.
@@ -450,7 +450,7 @@ ra-tion, Enum-De-cla-ra-tion, etc. Pour
 
 
 [2]
-<local_assets/etapeA0.png, id=151, 873.2625pt x 56.46094pt>
+<local_assets/etapeA0.png, id=156, 873.2625pt x 56.46094pt>
 File: local_assets/etapeA0.png Graphic file (type png)
 <use local_assets/etapeA0.png>
 Package pdftex.def Info: local_assets/etapeA0.png  used on input line 115.
@@ -458,12 +458,12 @@ Package pdftex.def Info: local_assets/etapeA0.png  used on input line 115.
 
 
 [3]
-<local_assets/etapeA1-1.png, id=158, 199.49532pt x 648.92438pt>
+<local_assets/etapeA1-1.png, id=164, 199.49532pt x 648.92438pt>
 File: local_assets/etapeA1-1.png Graphic file (type png)
 <use local_assets/etapeA1-1.png>
 Package pdftex.def Info: local_assets/etapeA1-1.png  used on input line 119.
 (pdftex.def)             Requested size: 135.89174pt x 442.05489pt.
-<local_assets/etapeA1-2.png, id=159, 199.49532pt x 503.63156pt>
+<local_assets/etapeA1-2.png, id=165, 199.49532pt x 503.63156pt>
 File: local_assets/etapeA1-2.png Graphic file (type png)
 <use local_assets/etapeA1-2.png>
 Package pdftex.def Info: local_assets/etapeA1-2.png  used on input line 119.
@@ -472,17 +472,17 @@ Package pdftex.def Info: local_assets/etapeA1-2.png  used on input line 119.
 
 [4 <./local_assets/etapeA0.png> <./local_assets/etapeA1-1.png> <./local_assets/
 etapeA1-2.png>]
-<local_assets/etapeA2-1.png, id=168, 928.97063pt x 129.48375pt>
+<local_assets/etapeA2-1.png, id=173, 928.97063pt x 129.48375pt>
 File: local_assets/etapeA2-1.png Graphic file (type png)
 <use local_assets/etapeA2-1.png>
 Package pdftex.def Info: local_assets/etapeA2-1.png  used on input line 123.
 (pdftex.def)             Requested size: 452.9679pt x 63.13737pt.
-<local_assets/etapeA2-2.png, id=169, 491.58656pt x 380.92313pt>
+<local_assets/etapeA2-2.png, id=174, 491.58656pt x 380.92313pt>
 File: local_assets/etapeA2-2.png Graphic file (type png)
 <use local_assets/etapeA2-2.png>
 Package pdftex.def Info: local_assets/etapeA2-2.png  used on input line 125.
 (pdftex.def)             Requested size: 452.9679pt x 351.0115pt.
-<local_assets/etapeA2-3.png, id=170, 476.53032pt x 240.9pt>
+<local_assets/etapeA2-3.png, id=175, 476.53032pt x 240.9pt>
 File: local_assets/etapeA2-3.png Graphic file (type png)
 <use local_assets/etapeA2-3.png>
 Package pdftex.def Info: local_assets/etapeA2-3.png  used on input line 127.
@@ -490,22 +490,22 @@ Package pdftex.def Info: local_assets/etapeA2-3.png  used on input line 127.
 
 
 [5 <./local_assets/etapeA2-1.png> <./local_assets/etapeA2-2.png>]
-<local_assets/etapeA3-1.png, id=178, 884.55469pt x 146.04562pt>
+<local_assets/etapeA3-1.png, id=183, 884.55469pt x 146.04562pt>
 File: local_assets/etapeA3-1.png Graphic file (type png)
 <use local_assets/etapeA3-1.png>
 Package pdftex.def Info: local_assets/etapeA3-1.png  used on input line 131.
 (pdftex.def)             Requested size: 452.9679pt x 74.78757pt.
-<local_assets/etapeA3-2.png, id=179, 756.57657pt x 46.67438pt>
+<local_assets/etapeA3-2.png, id=184, 756.57657pt x 46.67438pt>
 File: local_assets/etapeA3-2.png Graphic file (type png)
 <use local_assets/etapeA3-2.png>
 Package pdftex.def Info: local_assets/etapeA3-2.png  used on input line 133.
 (pdftex.def)             Requested size: 452.9679pt x 27.94429pt.
-<local_assets/etapeA3-3.png, id=180, 756.57657pt x 46.67438pt>
+<local_assets/etapeA3-3.png, id=185, 756.57657pt x 46.67438pt>
 File: local_assets/etapeA3-3.png Graphic file (type png)
 <use local_assets/etapeA3-3.png>
 Package pdftex.def Info: local_assets/etapeA3-3.png  used on input line 135.
 (pdftex.def)             Requested size: 452.9679pt x 27.94429pt.
-<local_assets/etapeA3-4.png, id=181, 633.11531pt x 46.67438pt>
+<local_assets/etapeA3-4.png, id=186, 633.11531pt x 46.67438pt>
 File: local_assets/etapeA3-4.png Graphic file (type png)
 <use local_assets/etapeA3-4.png>
 Package pdftex.def Info: local_assets/etapeA3-4.png  used on input line 137.
@@ -514,22 +514,22 @@ Package pdftex.def Info: local_assets/etapeA3-4.png  used on input line 137.
 
 [6 <./local_assets/etapeA2-3.png> <./local_assets/etapeA3-1.png> <./local_asset
 s/etapeA3-2.png> <./local_assets/etapeA3-3.png>]
-<local_assets/etapeA3-5.png, id=190, 706.89093pt x 46.67438pt>
+<local_assets/etapeA3-5.png, id=195, 706.89093pt x 46.67438pt>
 File: local_assets/etapeA3-5.png Graphic file (type png)
 <use local_assets/etapeA3-5.png>
 Package pdftex.def Info: local_assets/etapeA3-5.png  used on input line 139.
 (pdftex.def)             Requested size: 452.9679pt x 29.90851pt.
-<local_assets/etapeA3-6.png, id=191, 977.15062pt x 228.855pt>
+<local_assets/etapeA3-6.png, id=196, 977.15062pt x 228.855pt>
 File: local_assets/etapeA3-6.png Graphic file (type png)
 <use local_assets/etapeA3-6.png>
 Package pdftex.def Info: local_assets/etapeA3-6.png  used on input line 141.
 (pdftex.def)             Requested size: 452.9679pt x 106.08821pt.
-<local_assets/etapeB2.png, id=192, 909.3975pt x 457.71pt>
+<local_assets/etapeB2.png, id=197, 909.3975pt x 457.71pt>
 File: local_assets/etapeB2.png Graphic file (type png)
 <use local_assets/etapeB2.png>
 Package pdftex.def Info: local_assets/etapeB2.png  used on input line 145.
 (pdftex.def)             Requested size: 452.9679pt x 227.98842pt.
-<local_assets/etapeB3.png, id=193, 888.31876pt x 130.98938pt>
+<local_assets/etapeB3.png, id=198, 888.31876pt x 130.98938pt>
 File: local_assets/etapeB3.png Graphic file (type png)
 <use local_assets/etapeB3.png>
 Package pdftex.def Info: local_assets/etapeB3.png  used on input line 149.
@@ -538,46 +538,52 @@ Package pdftex.def Info: local_assets/etapeB3.png  used on input line 149.
 
 [7 <./local_assets/etapeA3-4.png> <./local_assets/etapeA3-5.png> <./local_asset
 s/etapeA3-6.png> <./local_assets/etapeB2.png>]
-<../../starter/callgraph.png, id=202, 6994.13pt x 502.87875pt>
-File: ../../starter/callgraph.png Graphic file (type png)
-<use ../../starter/callgraph.png>
-Package pdftex.def Info: ../../starter/callgraph.png  used on input line 151.
-(pdftex.def)             Requested size: 452.9679pt x 32.56549pt.
-<local_assets/etapeB4.png, id=203, 1037.37563pt x 403.5075pt>
+
+LaTeX Warning: File `../../starter/callgraph.png' not found on input line 151.
+
+
+! Package pdftex.def Error: File `../../starter/callgraph.png' not found: using
+ draft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.151 ...#checkOut(Member) n’a aucune appelante}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+
+[8 <./local_assets/etapeB3.png>]
+<local_assets/etapeB4.png, id=214, 1037.37563pt x 403.5075pt>
 File: local_assets/etapeB4.png Graphic file (type png)
 <use local_assets/etapeB4.png>
 Package pdftex.def Info: local_assets/etapeB4.png  used on input line 155.
 (pdftex.def)             Requested size: 452.9679pt x 176.19545pt.
 
 
-[8 <./local_assets/etapeB3.png> <../../starter/callgraph.png> <./local_assets/e
-tapeB4.png>]
+[9 <./local_assets/etapeB4.png>]
 
-[9] (./TP1-Analyse_statique.aux)
+[10] (./TP1-Analyse_statique.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-
-
-Package rerunfilecheck Warning: File `TP1-Analyse_statique.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `TP1-Analyse_statique.out':
-(rerunfilecheck)             Before: 9689BEA20CE065F893971EA1657011BE;2499
-(rerunfilecheck)             After:  02DA414D175BBBCDF9589EC9683B3849;2574.
+Package rerunfilecheck Info: File `TP1-Analyse_statique.out' has not changed.
+(rerunfilecheck)             Checksum: 02DA414D175BBBCDF9589EC9683B3849;2574.
  ) 
 Here is how much of TeX's memory you used:
- 13109 strings out of 474503
- 210310 string characters out of 5746475
- 619785 words of memory out of 5000000
- 35965 multiletter control sequences out of 15000+600000
+ 13134 strings out of 475108
+ 211206 string characters out of 5764255
+ 619298 words of memory out of 5000000
+ 35952 multiletter control sequences out of 15000+600000
  568742 words of font info for 56 fonts, out of 8000000 for 9000
- 372 hyphenation exceptions out of 8191
- 90i,6n,93p,580b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.60
-0pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.
+ 36 hyphenation exceptions out of 8191
+ 90i,6n,93p,580b,533s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.60
+0pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.
 600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx144
 0.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1
 200.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/ecb
@@ -587,10 +593,10 @@ crm1440.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec
 ec/ecbx1728.600pk> </home/nathan/.texlive2025/texmf-var/fonts/pk/ljfour/jknappe
 n/ec/ecbx2074.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmmi12.pfb>
-Output written on TP1-Analyse_statique.pdf (11 pages, 911899 bytes).
+Output written on TP1-Analyse_statique.pdf (12 pages, 710066 bytes).
 PDF statistics:
- 557 PDF objects out of 1000 (max. 8388607)
- 209 compressed objects within 3 object streams
- 36 named destinations out of 1000 (max. 500000)
- 283 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 569 PDF objects out of 1000 (max. 8388607)
+ 219 compressed objects within 3 object streams
+ 37 named destinations out of 1000 (max. 500000)
+ 286 words of extra memory for PDF output out of 10000 (max. 10000000)
 
